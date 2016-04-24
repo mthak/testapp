@@ -36,5 +36,5 @@ mavenJob("APM-${it.path}") {
     }*/
 }
 }
-
+}
 
