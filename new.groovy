@@ -30,7 +30,7 @@ categorizedJobsView('APM-Jobs') {
         regex(/APM-.*/)
     }
     categorizationCriteria {
-        regexGroupingRule(/^APM-.*$/)
+        regexGroupingRule(/^APM-.*$/, APM-Master)
 
     }
     description("APM-Master")
