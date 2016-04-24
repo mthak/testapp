@@ -10,7 +10,7 @@ categorizedJobsView('APM-Jobs') {
     jobs {
     }
     categorizationCriteria {
-        regexGroupingRule(/^APM_.*$/)
+        regexGroupingRule(/^APM-.*$/)
     }
     columns {
         status()
