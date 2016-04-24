@@ -1,16 +1,4 @@
 import groovy.json.JsonSlurper
-bsView('APM-Jobs') {
-    jobs {
-    }
-    categorizationCriteria {
-        regexGroupingRule(/^APM-.*$/)
-    }
-    columns {
-        status()
-        categorizedJob()
-        buildButton()
-    }
-}
 def slurper = new JsonSlurper()
 
 def jobsJson = new JsonSlurper().parseText( new URL( 'https://api.github.com/repos/mthak/spark/git/trees/master?' ).text )
@@ -37,7 +25,6 @@ mavenJob("APM-${it.path}") {
 }
 }
 }
-
 categorizedJobsView('APM-Jobs') {
     jobs {
         regex(/APM-.*/)
