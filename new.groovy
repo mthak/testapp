@@ -33,6 +33,7 @@ categorizedJobsView('APM-Jobs') {
         regexGroupingRule(/^APM-.*$/)
 
     }
+    description("APM-Master")
     columns {
         status()
         categorizedJob()
