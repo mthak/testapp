@@ -23,7 +23,7 @@ jobsJson.tree.each {
 if (it.type == 'tree' && it.path != '.github') {
    println it.path
    println ("Creating jobs ${it.path}")
-mavenJob("APM-${it.path}) {
+mavenJob("APM-${it.path}") {
     scm {
         git(giturl,branch)
     }
