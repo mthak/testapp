@@ -27,7 +27,7 @@ mavenJob("APM-${it.path}") {
 }
 categorizedJobsView('APM-Jobs') {
     jobs {
-        //regex(/APM-.*/)
+        regex(/APM-.*/)
     }
     categorizationCriteria {
         regexGroupingRule(/^APM-.*$/)
