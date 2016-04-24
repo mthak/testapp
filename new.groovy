@@ -30,10 +30,8 @@ mavenJob("APM-${it.path}") {
     triggers {
      scm('*/15 * * * *')
     }
-    maven {
-        rootPOM("${it.path}/pom.xml")
+        rootPOM("${it['path']}/pom.xml")
         goals(command)
-     }   
     /*steps {
         maven(command)
     }*/
