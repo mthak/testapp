@@ -21,8 +21,8 @@ categorizedJobsView('APM-Jobs') {
 
 jobsJson.tree.each { 
 if (it.type == 'tree' && it.path != '.github') {
-   println it.path
-   println ("Creating jobs ${it.path}")
+   path = it.path
+   println "Creating jobs " + path
 mavenJob("APM-${it.path}") {
     scm {
         git(giturl,branch)
@@ -30,7 +30,7 @@ mavenJob("APM-${it.path}") {
     triggers {
      scm('*/15 * * * *')
     }
-        rootPOM("${it['path']}/pom.xml")
+        rootPOM("${path}/pom.xml")
         goals(command)
     /*steps {
         maven(command)
