@@ -1,0 +1,34 @@
+{
+  "projects": {
+     "X1": {
+       "build_data1" : {
+           "branch" : "master",
+           "buildscript" : "mvn -e clean deploy",
+           }
+        "build_data2" : {
+            "branch" : "master"
+            "buildscript" : " mvn -e clean package"
+            }
+        "build_dataX" : {
+            "branch" : "master"
+            "buildscript" : " mvn -e clean install"
+            }
+         }   
+     "X2": {
+       "build_APM1" : {
+           "branch" : "master",
+           "buildscript" : "mvn -e clean deploy",
+           }
+        "build_APM2" : {
+            "branch" : "master"
+            "buildscript" : " mvn -e clean package"
+            }
+        "build_APMX" : {
+            "branch" : "master"
+            "buildscript" : " mvn -e clean install"
+            }
+         }
+      }
+  }    
+
+
