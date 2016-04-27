@@ -1,13 +1,20 @@
 import groovy.json.JsonSlurper
 def slurper = new JsonSlurper()
 
-def jobsJson = new JsonSlurper().parseText( new URL( 'https://api.github.com/repos/mthak/spark/git/trees/master?' ).text )
+//def jobsJson = new JsonSlurper().parseText( new URL( 'https://api.github.com/repos/mthak/spark/git/trees/master?' ).text )
 //println jobsJson
 def giturl = "http://github.com/mthak/spark.git"
 def branch = "master"
 def command = "-e clean deploy -DskipTests"
-jobsJson.tree.each { 
-if (it.type == 'tree' && it.path != '.github') {
+def jobsJson = slurper.parseText(readFileFromWorkspace("new.json"))
+
+jobsJson.projects.each { team,jobs -> 
+     jobnames=jobs
+     jobnames.each { jobs,confid ->
+         println "Jobs name is " + jobs
+         println "config for jobs is " + config
+
+/*if (it.type == 'tree' && it.path != '.github') {
    path = it.path
    println "Creating jobs " + path
 mavenJob("APM-${it.path}") {
@@ -15,7 +22,6 @@ mavenJob("APM-${it.path}") {
         git(giturl,branch)
     }
     triggers {
-     scm('*/15 * * * *')
     }
         rootPOM("${path}/pom.xml")
         goals(command)
@@ -24,7 +30,7 @@ mavenJob("APM-${it.path}") {
     }*/
 }
 }
-}
+//}
 categorizedJobsView('APM-Jobs') {
     jobs {
         regex(/APM-.*/)
