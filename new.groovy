@@ -10,7 +10,8 @@ def jobsJson = slurper.parseText(readFileFromWorkspace("new.json"))
 
 jobsJson.projects.each { team,projects -> 
      jobnames=projects
-     jobnames.each { jobs,confid ->
+     println "projects" + projects
+     jobnames.each { jobs,config ->
          println "Jobs name is " + jobs
          println "config for jobs is " + config
    }
