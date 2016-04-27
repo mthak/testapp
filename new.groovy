@@ -13,7 +13,8 @@ jobsJson.projects.each { team,projects ->
      jobnames.each { jobs,confid ->
          println "Jobs name is " + jobs
          println "config for jobs is " + config
-
+   }
+}
 /*if (it.type == 'tree' && it.path != '.github') {
    path = it.path
    println "Creating jobs " + path
@@ -27,10 +28,10 @@ mavenJob("APM-${it.path}") {
         goals(command)
     /*steps {
         maven(command)
-    }*/
+    }
 }
 }
-//}
+}*/
 categorizedJobsView('APM-Jobs') {
     jobs {
         regex(/APM-.*/)
