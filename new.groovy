@@ -18,7 +18,7 @@ jobsJson.projects.each { team,projects ->
      jobnames.each { jobs,config ->
          println "Jobs name is " + jobs
          println "config for jobs is " + config
-         mavenJob(team/jobs) {
+         mavenJob("${team}/${jobs}") {
             scm {
               git(config.giturl,config.branch)
             }
