@@ -14,7 +14,8 @@ jobsJson.projects.each { team,projects ->
          displayName(team)
              description('Folder for project')
              }
-     println "projects" + projects
+
+     println "created folder" + team
      jobnames.each { jobs,config ->
          println "Jobs name is " + jobs
          println "config for jobs is " + config
@@ -24,7 +25,6 @@ jobsJson.projects.each { team,projects ->
             }
             triggers {
             }
-             //rootPOM("${path}/pom.xml")
              goals(config.buildscript)
    }
 }
