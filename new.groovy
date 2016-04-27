@@ -10,21 +10,15 @@ def jobsJson = slurper.parseText(readFileFromWorkspace("new.json"))
 
 jobsJson.projects.each { team,projects -> 
      jobnames=projects
+     folder(team) {
+         displayName(team)
+             description('Folder for project')
+             }
      println "projects" + projects
      jobnames.each { jobs,config ->
-         categorizedJobsView(team) {
-        jobs {
-            name(jobs)
-    }
-        categorizationCriteria {
-        regexGroupingRule(/.*$/, namingRule=team)
-
-    }
-  }
-   
          println "Jobs name is " + jobs
          println "config for jobs is " + config
-         mavenJob(jobs) {
+         mavenJob(team/jobs) {
             scm {
               git(config.giturl,config.branch)
             }
