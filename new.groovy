@@ -12,9 +12,28 @@ jobsJson.projects.each { team,projects ->
      jobnames=projects
      println "projects" + projects
      jobnames.each { jobs,config ->
+         categorizedJobsView(team) {
+        jobs {
+            name(jobs)
+    }
+        categorizationCriteria {
+        regexGroupingRule(/.*$/, namingRule=team)
+
+    }
+  }
+   
          println "Jobs name is " + jobs
          println "config for jobs is " + config
+         mavenJob(jobs) {
+            scm {
+              git(config.giturl,config.branch)
+            }
+            triggers {
+            }
+             //rootPOM("${path}/pom.xml")
+             goals(config.buildscript)
    }
+}
 }
 /*if (it.type == 'tree' && it.path != '.github') {
    path = it.path

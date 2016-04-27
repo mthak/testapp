@@ -27,11 +27,11 @@
            "branch" : "master",
            "buildscript" : "mvn -e clean deploy"
            },
-        "deploy-apm" : {
+        "APM-QA" : {
             "branch" : "master",
             "buildscript" : " mvn -e clean package"
             },
-        "deplo-qa" : {
+        "APM-System" : {
             "branch" : "master",
             "buildscript" : " mvn -e clean install"
             }
