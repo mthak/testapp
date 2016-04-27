@@ -8,8 +8,8 @@ def branch = "master"
 def command = "-e clean deploy -DskipTests"
 def jobsJson = slurper.parseText(readFileFromWorkspace("new.json"))
 
-jobsJson.projects.each { team,jobs -> 
-     jobnames=jobs
+jobsJson.projects.each { team,projects -> 
+     jobnames=projects
      jobnames.each { jobs,confid ->
          println "Jobs name is " + jobs
          println "config for jobs is " + config
