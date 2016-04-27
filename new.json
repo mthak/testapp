@@ -13,12 +13,12 @@
            },
         "deploy-qa" : {
             "giturl" : "git://github.ge.com/X1/projectX",
-            "branch" : "master"
+            "branch" : "master",
             "buildscript" : " mvn -e clean package"
             },
         "deploy-system" : {
             "giturl" : "git://github.ge.com/X1/projectX",
-            "branch" : "master"
+            "branch" : "master",
             "buildscript" : " mvn -e clean install"
             },
          }   
@@ -28,11 +28,11 @@
            "buildscript" : "mvn -e clean deploy",
            },
         "deploy-apm" : {
-            "branch" : "master"
+            "branch" : "master",
             "buildscript" : " mvn -e clean package"
             },
         "deplo-qa" : {
-            "branch" : "master"
+            "branch" : "master",
             "buildscript" : " mvn -e clean install"
             },
          }
