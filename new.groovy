@@ -32,7 +32,7 @@ jobsJson.projects.each { team,projects ->
 /*if (it.type == 'tree' && it.path != '.github') {
    path = it.path
    println "Creating jobs " + path
-mavenJob("APM-${it.path}") {
+mavenJob("SPM-${it.path}") {
     scm {
         git(giturl,branch)
     }
@@ -46,15 +46,15 @@ mavenJob("APM-${it.path}") {
 }
 }
 }*/
-categorizedJobsView('APM-Jobs') {
+categorizedJobsView('SPM-Jobs') {
     jobs {
-        regex(/APM-.*/)
+        regex(/SPM-.*/)
     }
     categorizationCriteria {
-        regexGroupingRule(/^APM-.*$/, namingRule="APM-Master")
+        regexGroupingRule(/^SPM-.*$/, namingRule="SPM-Master")
 
     }
-    description("APM-Master")
+    description("SPM-Master")
     columns {
         status()
         categorizedJob()
