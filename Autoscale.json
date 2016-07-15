@@ -1,6 +1,6 @@
 {
   "AWSTemplateFormatVersion": "2010-09-09",
-  "Description": "Auto scaling deploy example",
+  "Description": "Auto scaling deploy for ami",
   "Parameters": {
     "AvailabilityZone": {
       "Type": "String",
