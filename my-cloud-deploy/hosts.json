@@ -1,0 +1,46 @@
+{
+  "apache_hosts": [
+        {
+           "cname": "x.y.z.a",
+           "username": "root",
+           "password": "foobarbaz",
+           "install_pkg": "apache2 php5",
+           "web_port": "80",
+           "disk_threshold": "80",
+           "override_port": "true",
+           "documentroot" : "/data/app"
+        },
+        {
+           "cname": "x.y.z.b",
+           "username": "root",
+           "password": "foobarbaz",
+           "install_pkg": "apache2 php5",
+           "web_port": "80",
+           "disk_threshold": "80",
+           "override_port": "true",
+           "documentroot" : "/data/app"
+        },
+        {
+           "cname":"x.y.a.d",
+           "username":"root",
+           "password":"foobarbaz",
+           "install_pkg": "apache2 php5",
+           "web_port": "8080",
+           "disk_threshold": "80",
+           "override_port": "true",
+           "documentroot": "/data/app1"
+        }
+
+    ],
+   "nginx_config":
+            {
+          "cname": "52.201.238.231",
+          "username": "root",
+          "password": "foobarbaz",
+          "install_pkg": "nginx",
+          "disk_threshold": "80",
+          "override_port": "true",
+          "port" : "80"
+        }
+}
+        

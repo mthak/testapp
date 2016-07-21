@@ -1,0 +1,16 @@
+upstream {{ hostname }} {
+        {% set counter = 0 -%}
+        {% for servername in servers -%}
+        server {{ servername }};
+        {% set counter = counter + 1 -%}
+        {% endfor -%}
+    }
+
+    server {
+        listen 80;
+
+        location / {
+            proxy_pass http://{{ hostname }};
+            index  index.php index.html index.htm;
+        }
+    }
