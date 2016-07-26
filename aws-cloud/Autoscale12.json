@@ -1,0 +1,223 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Auto scaling deploy for ami",
+  "Parameters": {
+    "AvailabilityZone": {
+      "Type": "String",
+      "Default": "us-west-2c"
+    },
+    "ImageId": {
+      "Type": "String",
+      "Default":"ami-4e86492e"
+    },
+    "VPC" : {
+            "Type" : "String",
+            "Default":"vpc-5cfcb138"
+                },
+     "PublicSubnet" : {
+             "Type" : "String",
+             "Default" : "subnet-7212c02a"
+             },
+     "InternetGateway": {
+             "Type" : "String",
+             "Default" : "igw-a6b043c2"
+             },
+    "KeyName": {
+      "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the instance",
+      "Type": "String",
+      "Default":"manoj-aws"
+    },
+    "Version": { 
+         "Type": "String",
+         "Default": "1.0.0"
+    }
+  },
+  "Resources": {
+    
+    "PublicRouteTable": {
+      "Type": "AWS::EC2::RouteTable",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "Public"
+          }
+        ]
+      }
+    },
+    "OutboundConnectionRoute": {
+      "Type": "AWS::EC2::Route",
+      "Properties": {
+        "DestinationCidrBlock": "0.0.0.0/0",
+        "GatewayId": {
+          "Ref": "InternetGateway"
+        },
+        "RouteTableId": {
+          "Ref": "PublicRouteTable"
+        }
+      }
+    },
+    "PublicSubnetRouteTableAssociation": {
+      "Type": "AWS::EC2::SubnetRouteTableAssociation",
+      "Properties": {
+        "RouteTableId": {
+          "Ref": "PublicRouteTable"
+        },
+        "SubnetId": {
+          "Ref": "PublicSubnet"
+        }
+      }
+    },
+    "WebServerSG": {
+      "Type": "AWS::EC2::SecurityGroup",
+      "Properties": {
+        "VpcId": {
+          "Ref": "VPC"
+        },
+        "GroupDescription": "Allows inbound http traffic",
+        "SecurityGroupIngress": [
+          {
+            "CidrIp": "0.0.0.0/0",
+            "FromPort": 80,
+            "IpProtocol": "tcp",
+            "ToPort": 80
+          }
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "http"
+          }
+        ]
+      }
+    },
+    "LoadBalancer11": {
+      "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "Properties": {
+        "LoadBalancerName": "LoadBalancer11",
+        "Listeners": [
+          {
+            "InstancePort": 8080,
+            "InstanceProtocol": "HTTP",
+            "LoadBalancerPort": 80,
+            "Protocol": "HTTP"
+          }
+        ],
+        "Scheme": "internet-facing",
+        "SecurityGroups": [
+          {
+            "Ref": "WebServerSG"
+          }
+        ],
+        "Subnets": [
+          {
+            "Ref": "PublicSubnet"
+          }
+        ]
+      }
+    },
+    "AppLaunchConfiguration": {
+      "Type": "AWS::AutoScaling::LaunchConfiguration",
+      "Metadata" : {
+              "AWS::CloudFormation::Init" : {
+                 "config": { 
+                   "files" : {
+                    "/etc/chef/solo.rb" : {
+                    "content" : { "Fn::Join" : ["\n", [
+                      "log_level :info",
+                    "log_location STDOUT",
+                    "file_cache_path \"/var/chef-solo\"",
+                    "cookbook_path \"/var/chef-solo/cookbooks\"",
+                    "json_attribs \"/etc/chef/node.json\"",
+                    "recipe_url \"https://s3-us-west-2.amazonaws.com/mt-cookbook/webapp.tar.gz\""
+                    ]] },
+                    "mode" : "000644",
+                    "owner" : "root",
+                    "group" : "root"
+                 },
+                "/etc/chef/node.json" : {
+                 "content" : {
+                     "tcat" : {
+                       "version" : {"Ref" : "Version"}
+                        },
+                    "run_list": [ "recipe[deploy_webapp]" ]
+                    },
+                "mode" : "000644",
+                "owner" : "root",
+                "group" : "root"
+              }
+            }
+          }  
+         }   
+        },
+      "Properties": {
+        "AssociatePublicIpAddress": true,
+        "ImageId": {
+          "Ref": "ImageId"
+        },
+        "InstanceType": "t2.micro",
+        "SecurityGroups": [],
+        "KeyName" : { "Ref" : "KeyName" },
+      "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
+          "#!/bin/bash -xe \n",
+          "mkdir -p /local_app/repo \n",
+          "/usr/bin/easy_install --script-dir /opt/aws/bin https://s3.amazonaws.com/cloudformation-examples/aws-cfn-bootstrap-latest.tar.gz \n",
+          " yum -y install tomcat \n",
+          " service tomcat start \n",
+          "/opt/aws/bin/cfn-init --verbose -s ", { "Ref" : "AWS::StackId" }, " -r AppLaunchConfiguration ",
+                    "   --region ", { "Ref" : "AWS::Region" }, " && ",
+          "chef-solo  \n",
+          "/opt/aws/bin/cfn-signal -e 0 --stack ", { "Ref": "AWS::StackName" },
+          " --resource AppASG ",
+          " --region ", { "Ref" : "AWS::Region" }, "\n"
+        ]]}}
+      }
+    },
+    "AppASG": {
+      "Type": "AWS::AutoScaling::AutoScalingGroup",
+      "Properties": {
+        "AvailabilityZones": [
+          {
+            "Ref": "AvailabilityZone"
+          }
+        ],
+        "DesiredCapacity": 2,
+        "LaunchConfigurationName": {
+          "Ref": "AppLaunchConfiguration"
+        },
+        "LoadBalancerNames": [
+          {
+            "Ref": "LoadBalancer11"
+          }
+        ],
+        "MaxSize": 4,
+        "MinSize": 2,
+        "VPCZoneIdentifier": [
+          {
+            "Ref": "PublicSubnet"
+          }
+        ]
+      },
+      "CreationPolicy": {
+    "ResourceSignal": {
+      "Count": "2",
+      "Timeout": "PT15M"
+       }
+       },
+      "UpdatePolicy": {
+        "AutoScalingRollingUpdate": {
+          "MinInstancesInService": 2
+        }
+      }
+    }   
+   },
+   "Outputs" : {
+    "URL" : {
+      "Description" : "The URL of the website",
+      "Value" :  { "Fn::Join" : [ "", [ "http://", { "Fn::GetAtt" : [ "LoadBalancer11", "DNSName" ]}]]}
+    }
+  }
+}
