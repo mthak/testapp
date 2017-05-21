@@ -6,8 +6,8 @@
  <servers>
     <server>
       <id>release-repo</id>
-      <username>user</username>
-      <password>bitnami</password>
+      <username>admin</username>
+      <password>password</password>
     </server>
 </servers>
 </settings>
