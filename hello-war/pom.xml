@@ -8,7 +8,7 @@
 	<name>Hello World Web Application Repository</name>
 	<description>Simplest possible Java Webapp</description>
 <properties>
-       <repository.root>http://52.42.88.223/artifactory</repository.root>
+       <repository.root>http://54.86.19.142:8081/artifactory</repository.root>
    </properties>
 	<build>
 		<plugins>
